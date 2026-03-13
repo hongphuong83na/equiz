@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Thông tin người dùng hệ thống",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Họ và tên" },
+        "class": { "type": "string", "description": "Lớp học" },
+        "email": { "type": "string", "description": "Địa chỉ email" },
+        "role": { "type": "string", "enum": ["student", "teacher", "admin"], "description": "Vai trò người dùng" }
+      },
+      "required": ["name", "email", "role"]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "Thông tin đề thi",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Tiêu đề đề thi" },
+        "subject": { "type": "string", "description": "Môn học" },
+        "duration": { "type": "integer", "description": "Thời gian làm bài (phút)" },
+        "totalQuestions": { "type": "integer", "description": "Tổng số câu hỏi" },
+        "code": { "type": "string", "description": "Mã đề thi" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "duration", "code"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Câu hỏi trong đề thi",
+      "type": "object",
+      "properties": {
+        "examId": { "type": "string", "description": "ID của đề thi" },
+        "type": { "type": "string", "enum": ["MCQ", "TRUE_FALSE"], "description": "Loại câu hỏi" },
+        "question": { "type": "string", "description": "Nội dung câu hỏi" },
+        "optionA": { "type": "string" },
+        "optionB": { "type": "string" },
+        "optionC": { "type": "string" },
+        "optionD": { "type": "string" },
+        "correctAnswer": { "type": "string", "description": "Đáp án đúng (A, B, C, D hoặc True, False)" }
+      },
+      "required": ["examId", "type", "question", "correctAnswer"]
+    },
+    "Result": {
+      "title": "Result",
+      "description": "Kết quả bài thi của học sinh",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID người dùng" },
+        "userName": { "type": "string", "description": "Tên người dùng" },
+        "userClass": { "type": "string", "description": "Lớp người dùng" },
+        "examId": { "type": "string", "description": "ID đề thi" },
+        "examTitle": { "type": "string", "description": "Tiêu đề đề thi" },
+        "score": { "type": "number", "description": "Điểm số" },
+        "answers": { "type": "object", "description": "Các đáp án đã chọn" },
+        "submitTime": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "examId", "score", "submitTime"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "Thông tin cá nhân người dùng" },
+    "/exams/{examId}": { "schema": "Exam", "description": "Danh sách đề thi" },
+    "/exams/{examId}/questions/{questionId}": { "schema": "Question", "description": "Câu hỏi của đề thi" },
+    "/results/{resultId}": { "schema": "Result", "description": "Kết quả thi" }
+  }
+}
